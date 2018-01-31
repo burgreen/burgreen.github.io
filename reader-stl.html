@@ -15,9 +15,9 @@
 // Example code
 // ----------------------------------------------------------------------------
 
-const reader = vtk.IO.Geometry.STLReader.newInstance();
-const mapper = vtk.Rendering.Core.Mapper.newInstance({ scalarVisibility: false });
-const actor = vtk.Rendering.Core.Actor.newInstance();
+const reader = vtk.IO.Geometry.vtkSTLReader.newInstance();
+const mapper = vtk.Rendering.Core.vtkMapper.newInstance({ scalarVisibility: false });
+const actor = vtk.Rendering.Core.vtkActor.newInstance();
 
 actor.setMapper(mapper);
 mapper.setInputConnection(reader.getOutputPort());
@@ -25,7 +25,7 @@ mapper.setInputConnection(reader.getOutputPort());
 // ----------------------------------------------------------------------------
 
 function update() {
-  const fullScreenRenderer = vtk.Rendering.Misc.FullScreenRenderWindow.newInstance();
+  const fullScreenRenderer = vtk.Rendering.Misc.vtkFullScreenRenderWindow.newInstance();
   const renderer = fullScreenRenderer.getRenderer();
   const renderWindow = fullScreenRenderer.getRenderWindow();
 
