@@ -5,20 +5,19 @@
 <script type="text/javascript" src="https://unpkg.com/vtk.js"></script>
 <script type="text/javascript">
 
-import 'vtk.js/Sources/favicon';
-
-import vtkActor from 'vtk.js/Sources/Rendering/Core/Actor';
-import vtkFullScreenRenderWindow from 'vtk.js/Sources/Rendering/Misc/FullScreenRenderWindow';
-import vtkMapper from 'vtk.js/Sources/Rendering/Core/Mapper';
-import vtkSTLReader from 'vtk.js/Sources/IO/Geometry/STLReader';
+//import 'vtk.js/Sources/favicon';
+//import vtkActor from 'vtk.js/Sources/Rendering/Core/Actor';
+//import vtkFullScreenRenderWindow from 'vtk.js/Sources/Rendering/Misc/FullScreenRenderWindow';
+//import vtkMapper from 'vtk.js/Sources/Rendering/Core/Mapper';
+//import vtkSTLReader from 'vtk.js/Sources/IO/Geometry/STLReader';
 
 // ----------------------------------------------------------------------------
 // Example code
 // ----------------------------------------------------------------------------
 
-const reader = vtkSTLReader.newInstance();
-const mapper = vtkMapper.newInstance({ scalarVisibility: false });
-const actor = vtkActor.newInstance();
+const reader = vtk.IO.Geometry.STLReader.newInstance();
+const mapper = vtk.Rendering.Core.Mapper.newInstance({ scalarVisibility: false });
+const actor = vtk.Rendering.Core.Actor.newInstance();
 
 actor.setMapper(mapper);
 mapper.setInputConnection(reader.getOutputPort());
@@ -26,7 +25,7 @@ mapper.setInputConnection(reader.getOutputPort());
 // ----------------------------------------------------------------------------
 
 function update() {
-  const fullScreenRenderer = vtkFullScreenRenderWindow.newInstance();
+  const fullScreenRenderer = vtk.Rendering.Misc.FullScreenRenderWindow.newInstance();
   const renderer = fullScreenRenderer.getRenderer();
   const renderWindow = fullScreenRenderer.getRenderWindow();
 
