@@ -65,8 +65,8 @@ function handleFile(event) {
     myContainer.removeChild(fileContainer);
     const fileReader = new FileReader();
     fileReader.onload = function onLoad(e) {
-      reader.parseBinary(fileReader.result);
-      update(actor);
+      reader2.parseBinary(fileReader.result);
+      update(actor2);
     };
     fileReader.readAsArrayBuffer(files[0]);
   }
@@ -79,8 +79,8 @@ fileInput.addEventListener('change', handleFile);
 // ----------------------------------------------------------------------------
 
 //reader.setUrl(`${__BASE_PATH__}/data/stl/segmentation.stl`, { binary: true }).then(update);
-//reader.setUrl(`frog/body.stl`, { binary: true }).then(update(actor));
-reader.setUrl(`frog/wheels.stl`, { binary: true }).then(update(actor));
+reader2.setUrl(`frog/body.stl`, { binary: true }).then(update(actor2));
+//reader.setUrl(`frog/wheels.stl`, { binary: true }).then(update(actor));
 
 </script>
 </body>
