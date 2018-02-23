@@ -41,7 +41,7 @@ function update()
   const resetCamera = renderer.resetCamera;
   const render = renderWindow.render;
 
-  renderer.addActor(actor);
+  renderer.addActor(actor2);
   resetCamera();
   render();
 }
@@ -65,7 +65,7 @@ function handleFile(event) {
     myContainer.removeChild(fileContainer);
     const fileReader = new FileReader();
     fileReader.onload = function onLoad(e) {
-      reader.parseBinary(fileReader.result);
+      reader2.parseBinary(fileReader.result);
       update();
     };
     fileReader.readAsArrayBuffer(files[0]);
@@ -79,8 +79,8 @@ fileInput.addEventListener('change', handleFile);
 // ----------------------------------------------------------------------------
 
 //reader.setUrl(`${__BASE_PATH__}/data/stl/segmentation.stl`, { binary: true }).then(update);
-reader.setUrl(`frog/wheels.stl`, { binary: true }).then(update);
-//reader.setUrl(`frog/wheels.stl`, { binary: true }).then(update(actor));
+//reader.setUrl(`frog/wheels.stl`, { binary: true }).then(update);
+reader2.setUrl(`frog/wheels.stl`, { binary: true }).then(update);
 
 </script>
 </body>
