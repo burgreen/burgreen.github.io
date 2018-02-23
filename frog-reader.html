@@ -19,9 +19,9 @@ const reader = vtk.IO.Geometry.vtkSTLReader.newInstance();
 const mapper = vtk.Rendering.Core.vtkMapper.newInstance({ scalarVisibility: false });
 const actor = vtk.Rendering.Core.vtkActor.newInstance();
 
-const reader2 = vtk.IO.Geometry.vtkSTLReader.newInstance();
-const mapper2 = vtk.Rendering.Core.vtkMapper.newInstance({ scalarVisibility: false });
-const actor2 = vtk.Rendering.Core.vtkActor.newInstance();
+//const reader2 = vtk.IO.Geometry.vtkSTLReader.newInstance();
+//const mapper2 = vtk.Rendering.Core.vtkMapper.newInstance({ scalarVisibility: false });
+//const actor2 = vtk.Rendering.Core.vtkActor.newInstance();
 
 actor.setMapper(mapper);
 mapper.setInputConnection(reader.getOutputPort());
