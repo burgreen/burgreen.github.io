@@ -29,12 +29,12 @@ mapper.setInputConnection(reader.getOutputPort());
 actor2.setMapper(mapper2);
 mapper2.setInputConnection(reader2.getOutputPort());
 
-const fullScreenRenderer = vtk.Rendering.Misc.vtkFullScreenRenderWindow.newInstance();
 
 // ----------------------------------------------------------------------------
 
 function update()
 {
+  const fullScreenRenderer = vtk.Rendering.Misc.vtkFullScreenRenderWindow.newInstance();
   const renderer = fullScreenRenderer.getRenderer();
   const renderWindow = fullScreenRenderer.getRenderWindow();
 
