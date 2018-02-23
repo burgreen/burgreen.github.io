@@ -66,7 +66,7 @@ function handleFile(event) {
     const fileReader = new FileReader();
     fileReader.onload = function onLoad(e) {
       reader.parseBinary(fileReader.result);
-      update(actor);
+      //update(actor);
     };
     fileReader.readAsArrayBuffer(files[0]);
   }
