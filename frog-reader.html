@@ -32,7 +32,7 @@ mapper.setInputConnection(reader.getOutputPort());
 
 // ----------------------------------------------------------------------------
 
-function update( actor_ )
+function update()
 {
   const fullScreenRenderer = vtk.Rendering.Misc.vtkFullScreenRenderWindow.newInstance();
   const renderer = fullScreenRenderer.getRenderer();
@@ -41,7 +41,7 @@ function update( actor_ )
   const resetCamera = renderer.resetCamera;
   const render = renderWindow.render;
 
-  renderer.addActor(actor_);
+  renderer.addActor(actor);
   resetCamera();
   render();
 }
@@ -66,7 +66,7 @@ function handleFile(event) {
     const fileReader = new FileReader();
     fileReader.onload = function onLoad(e) {
       reader.parseBinary(fileReader.result);
-      update(actor);
+      update();
     };
     fileReader.readAsArrayBuffer(files[0]);
   }
@@ -79,7 +79,7 @@ fileInput.addEventListener('change', handleFile);
 // ----------------------------------------------------------------------------
 
 //reader.setUrl(`${__BASE_PATH__}/data/stl/segmentation.stl`, { binary: true }).then(update);
-reader.setUrl(`frog/body.stl`, { binary: true }).then(update(actor));
+reader.setUrl(`frog/body.stl`, { binary: true }).then(update);
 //reader.setUrl(`frog/wheels.stl`, { binary: true }).then(update(actor));
 
 </script>
