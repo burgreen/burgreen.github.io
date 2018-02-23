@@ -16,15 +16,17 @@
 // ----------------------------------------------------------------------------
 
 const reader = vtk.IO.Geometry.vtkSTLReader.newInstance();
-const reader2 = vtk.IO.Geometry.vtkSTLReader.newInstance();
 const mapper = vtk.Rendering.Core.vtkMapper.newInstance({ scalarVisibility: false });
-const mapper2 = vtk.Rendering.Core.vtkMapper.newInstance({ scalarVisibility: false });
 const actor = vtk.Rendering.Core.vtkActor.newInstance();
+
+const reader2 = vtk.IO.Geometry.vtkSTLReader.newInstance();
+const mapper2 = vtk.Rendering.Core.vtkMapper.newInstance({ scalarVisibility: false });
 const actor2 = vtk.Rendering.Core.vtkActor.newInstance();
 
 actor.setMapper(mapper);
-actor2.setMapper(mapper2);
 mapper.setInputConnection(reader.getOutputPort());
+
+actor2.setMapper(mapper2);
 mapper2.setInputConnection(reader2.getOutputPort());
 
 const fullScreenRenderer = vtk.Rendering.Misc.vtkFullScreenRenderWindow.newInstance();
@@ -64,7 +66,7 @@ function handleFile(event) {
     const fileReader = new FileReader();
     fileReader.onload = function onLoad(e) {
       reader.parseBinary(fileReader.result);
-      update();
+      update(actor);
     };
     fileReader.readAsArrayBuffer(files[0]);
   }
