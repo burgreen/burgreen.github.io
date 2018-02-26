@@ -42,6 +42,7 @@ function update()
   const render = renderWindow.render;
 
   renderer.addActor(actor);
+  renderer.addActor(actor2);
   resetCamera();
   render();
 }
@@ -66,7 +67,7 @@ function handleFile(event) {
     const fileReader = new FileReader();
     fileReader.onload = function onLoad(e) {
       reader.parseBinary(fileReader.result);
-      update(actor);
+      update();
     };
     fileReader.readAsArrayBuffer(files[0]);
   }
@@ -79,8 +80,11 @@ fileInput.addEventListener('change', handleFile);
 // ----------------------------------------------------------------------------
 
 //reader.setUrl(`${__BASE_PATH__}/data/stl/segmentation.stl`, { binary: true }).then(update);
-reader.setUrl(`frog/wheels.stl`, { binary: true }).then(update);
+//reader.setUrl(`frog/wheels.stl`, { binary: true }).then(update);
 //reader2.setUrl(`frog/body.stl`, { binary: true }).then(update);
+reader.setUrl(`frog/wheels.stl`, { binary: true });
+reader2.setUrl(`frog/body.stl`, { binary: true });
+update();
 
 </script>
 </body>
