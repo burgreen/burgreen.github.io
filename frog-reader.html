@@ -23,8 +23,8 @@ const reader2 = vtk.IO.Geometry.vtkSTLReader.newInstance();
 const mapper2 = vtk.Rendering.Core.vtkMapper.newInstance({ scalarVisibility: false });
 const actor2 = vtk.Rendering.Core.vtkActor.newInstance();
 
-//actor.setMapper(mapper);
-//mapper.setInputConnection(reader.getOutputPort());
+actor.setMapper(mapper);
+mapper.setInputConnection(reader.getOutputPort());
 
 actor2.setMapper(mapper2);
 mapper2.setInputConnection(reader2.getOutputPort());
@@ -41,7 +41,7 @@ function update()
   const resetCamera = renderer.resetCamera;
   const render = renderWindow.render;
 
-  //renderer.addActor(actor);
+  renderer.addActor(actor);
   renderer.addActor(actor2);
   resetCamera();
   render();
@@ -84,9 +84,9 @@ fileInput.addEventListener('change', handleFile);
 //reader.setUrl(`${__BASE_PATH__}/data/stl/segmentation.stl`, { binary: true }).then(update);
 //reader.setUrl(`frog/wheels.stl`, { binary: true }).then(update);
 //reader2.setUrl(`frog/body.stl`, { binary: true }).then(update);
-//reader.setUrl(`frog/wheels.stl`, { binary: true }).then(
+reader.setUrl(`frog/wheels.stl`, { binary: true }).then(
   reader2.setUrl(`frog/body.stl`, { binary: true }).then(update);
-//);
+);
 
 </script>
 </body>
