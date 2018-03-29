@@ -11,22 +11,6 @@ const part = []
 }
 
 // ----------------------------------------------------------------------------
-// define controls
-// ----------------------------------------------------------------------------
-
-let controls = '<table>' 
-for( i in part)
-{
-  controls += '<tr>';
-  controls += '<td>'+part[i]+'</td>';
-  controls += '<td>';
-  controls += '<input class="_'+part[i]+'" type="checkbox" checked />';
-  controls += '</td>';
-  controls += '</tr>';
-}
-controls += '</table>' 
-
-// ----------------------------------------------------------------------------
 // main objects
 // ----------------------------------------------------------------------------
 
@@ -49,8 +33,6 @@ const renderWindow = fullScreenRenderer.getRenderWindow();
 const resetCamera = renderer.resetCamera;
 const render = renderWindow.render;
 
-fullScreenRenderer.addController(controls);
-
 function update() 
 {
   for( i in actor )
@@ -61,6 +43,24 @@ function update()
   resetCamera();
   render();
 }
+
+// ----------------------------------------------------------------------------
+// define controls
+// ----------------------------------------------------------------------------
+
+let controls = '<table>' 
+for( i in part)
+{
+  controls += '<tr>';
+  controls += '<td>'+part[i]+'</td>';
+  controls += '<td>';
+  controls += '<input class="_'+part[i]+'" type="checkbox" checked />';
+  controls += '</td>';
+  controls += '</tr>';
+}
+controls += '</table>' 
+
+fullScreenRenderer.addController(controls);
 
 // ----------------------------------------------------------------------------
 // load parts and display
