@@ -6,8 +6,13 @@
 
 const part = []
 {
+  part.push('grill')
   part.push('body')
+  part.push('suspension')
+  part.push('engine')
+  part.push('transmission')
   part.push('wheels')
+  part.push('tires')
 }
 
 // ----------------------------------------------------------------------------
@@ -49,15 +54,18 @@ function update()
 // ----------------------------------------------------------------------------
 
 let controls = '<table>' 
+controls += '<tbody id="parts">' 
 for( i in part)
 {
   controls += '<tr>';
-  controls += '<td>'+part[i]+'</td>';
+  //controls += '<td id="id_'+part[i]+'+" style="cursor:pointer" onclick="_onClick(event)">'+part[i]+'</td>';
+  controls += '<td style="cursor:pointer">'+part[i]+'</td>';
   controls += '<td>';
   controls += '<input class="_'+part[i]+'" type="checkbox" checked />';
   controls += '</td>';
   controls += '</tr>';
 }
+controls += '</tbody>' 
 controls += '</table>' 
 
 fullScreenRenderer.addController(controls);
@@ -77,13 +85,17 @@ Promise.all(promises).then( update );
 // add control actions
 // ----------------------------------------------------------------------------
 
-for( i in part )
+document.getElementById("parts").onclick = (e) =>
 {
+  let p = e.target.parentElement;
+  let i = -1;
+  let change = 0;
+  if( e.target.nodeName === "TD"    ) change = 1;
+  if( e.target.nodeName === "TD"    ) i = p.rowIndex; 
+  if( e.target.nodeName === "INPUT" ) i = p.parentElement.rowIndex; 
   const s = '._'+part[i];
-  const a = actor[i];
-  document.querySelector(s).addEventListener('change', (e) => {
-    a.setVisibility(!!e.target.checked);
-    render();
-  });
+  const ele = document.querySelector(s);
+  if( change ) ele.checked = !ele.checked;
+  actor[i].setVisibility(ele.checked);
+  render();
 }
-
