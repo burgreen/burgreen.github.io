@@ -6,11 +6,19 @@
 
 const part = []
 {
+  part.push('glass')
   part.push('grill')
+  part.push('body2')
   part.push('body')
+  part.push('interior')
   part.push('suspension')
+  part.push('snorkle')
+  part.push('nozzles')
+  part.push('waterjet')
+  part.push('exhaust')
   part.push('engine')
   part.push('transmission')
+  part.push('brakes')
   part.push('wheels')
   part.push('tires')
 }
