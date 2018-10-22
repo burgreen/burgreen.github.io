@@ -1,12 +1,55 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <script type="text/javascript" src="https://unpkg.com/vtk.js"></script>
+  <script src="https://threejs.org/build/three.min.js"></script>
+  <script src="https://threejs.org/examples/js/WebGL.js"></script>
+  <script src="https://threejs.org/examples/js/loaders/STLLoader.js"></script>
+  <script src="https://threejs.org/examples/js/controls/TrackballControls.js"></script>
+  <script src="https://threejs.org/examples/js/libs/stats.min.js"></script>
 </head>
 <body>
-  <div>
-    loading frog vehicle...
-    <script src="reader.js"></script>
+
+<style>
+  .column1 {
+      float: left;
+      width: 20%;
+      padding: 10px;
+  }
+  .column2 {
+      float: left;
+      width: 75%;
+      padding: 10px;
+  }
+</style>
+
+<label id="vehicle_label" style="font-style: normal;">Notional vehicle</label>
+
+<div class="row">
+  <div class="column1" style="background-color:#aaa;">
+    <h2></h2>
+
+    <button type="button" 
+      onclick=
+      "
+        console.log( g_partDict )
+      "
+      > 
+      Update
+    </button>
+    
+    <div id="checkboxes"> </div>
+    <div id="color_r"> </div>
+    <div id="color_g"> </div>
+    <div id="color_b"> </div>
+
   </div>
+  <div class="column2" style="background-color:#bbb;">
+    <h2></h2>
+    <div id="MyScene"> </div>
+  </div>
+</div>
+
+<script src="reader-three.js"></script>
+
 </body>
 </html>
