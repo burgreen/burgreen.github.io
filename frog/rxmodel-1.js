@@ -1,9 +1,6 @@
-// using a Proxy is an option, though it's needed to replace the original object
+// rxmodel.js
 
-// 2018.09.28 added T-d::T-h::H-d cycle logic (time breaks cycles)
 // 2018.09.29 added param_param
-
-//import { Observable } from '@reactivex/rxjs/es6/Observable.js'
 
 console.log('RxJS included?', !!Rx);
 console.log('Ramda included?', !!R);
@@ -32,14 +29,14 @@ let param0 = // design parameters
   H_d: [45.67, 0],
 }
 
-let param_param = // usr defined parameters of parameters
+let param_param = // parameters of design parameters
 { 
   T_h_f: 1.0,
   T_d_f: 1.0,
   H_d_f: 1.0,
 }
 
-let data0 =   // derived data, never explicitly set
+let data0 = // derived data, never explicitly set
 { 
   // tire locations
   LF_x: [0,0], LF_y: [0,0], 
@@ -72,22 +69,6 @@ let data0 =   // derived data, never explicitly set
   RF_h: [0,0], 
   LR_h: [0,0], 
   RR_h: [0,0], 
-}
-
-// Take an object, and return a proxy with an 'observation$' stream
-
-const toObservableObject = targetObject => {
-    const subject = new Rx.Subject();
-    return new Proxy( targetObject, {
-        set: (target, name, value) => {
-            const oldValue = target[name];
-            const newValue = value;
-            target[name] = value;
-            subject.next({ name, oldValue, newValue, target });
-        },
-
-        get: (target, name) => name == 'subject' ? subject : target[name]
-    });
 }
 
 const toObservableObject2 = targetObject => {
@@ -141,17 +122,10 @@ const toObservableObject2 = targetObject => {
 const param = toObservableObject2( param0 );
 const data  = toObservableObject2( data0 );
 
-observer_C_x = {
-  next: ({name, oldValue, newValue,target}) => {
-    if( name == 'C_x' ) console.log(`${name} Changed from ${oldValue} to ${newValue}`)
-  }
-}
-
 f01 = {
   next: ({name, oldValue, newValue,target}) => {
     if( name == 'C_y' )
     {
-      //console.log(`${name} changed from ${oldValue} to ${newValue}`)
       stamp = param.C_y[1]
       data.LF_y  = [g_ref_y + param.C_y[0]/2., stamp]
       data.RF_y  = [g_ref_y - param.C_y[0]/2., stamp]
@@ -259,7 +233,6 @@ function f_exe()
   for( a in g_next_args )
   {
     n = g_next_args[a]
-    //console.log('a = ', a )
     n['subject'].next( n['arg'] )
   }
 }
@@ -281,13 +254,9 @@ f07 = {
         phi = F*H + (F-1)*S
         S = (F  )*T - phi
         H = (1-F)*T + phi
-        // the thing is T_d_f is not really a design-parameter as much 
-        // as a design-parameter-parameter.
-        // it actually could live as a T_d[2] value (todo: see if this can be done)
-        // it only effects future design changes, not the current config
-        stamp = param.T_d[1] // best approach or special case?
-        for( let i of inputs ) i[1] = stamps[0] // wise to do?? think expensive CFD
-        param.T_h = [S,stamps[0]] // fails unless above line exe
+        stamp = param.T_d[1] 
+        for( let i of inputs ) i[1] = stamps[0] 
+        param.T_h = [S,stamps[0]] 
         param.H_d = [2*H,stamps[0]]
         f_exe()
       }
@@ -312,9 +281,9 @@ f08 = {
         phi = (1.-F)*H + F*T
         T = (1.-F)*S + phi
         H = (  -F)*S + phi
-        stamp = param.T_h[1] // best approach or special case?
-        param.T_d = [2.*T,stamps[0]] // param_param not allows this to work
-        param.H_d = [2.*H,stamps[0]] // still need to think it thru though
+        stamp = param.T_h[1] 
+        param.T_d = [2.*T,stamps[0]] 
+        param.H_d = [2.*H,stamps[0]] 
         f_exe()
       }
     }
@@ -338,7 +307,7 @@ f09 = {
         phi = (1-F)*S + F*T
         T = (1-F)*H + phi
         S = ( -F)*H + phi
-        stamp = param.H_d[1] // best approach or special case?
+        stamp = param.H_d[1] 
         param.T_d = [2*T,stamp]
         param.T_h = [S,stamp]
         f_exe()
@@ -347,13 +316,6 @@ f09 = {
   }
 }
 
-observer_data = {
-  next: ({name, oldValue, newValue, target}) => {
-    console.log(` Data ${name} changed from ${oldValue} to ${target[name]}`)
-  }
-}
-
-//param.subject.subscribe(observer_C_x);
 param.subject.subscribe(f01);
 param.subject.subscribe(f02);
 param.subject.subscribe(f03);
@@ -363,22 +325,17 @@ param.subject.subscribe(f06);
 param.subject.subscribe(f07);
 param.subject.subscribe(f08);
 param.subject.subscribe(f09);
-//data.subject.subscribe(observer_data);
 
 // check initial constraints
 tol = 1.e-6
 val = param0.T_d[0] - (param0.H_d[0] + 2*param0.T_h[0])
 if( Math.abs(val) > tol ) throw "T_d,H_d,T_h contraint not met"
 
-//const source = from(param0)
-//source.subscribe( x => console.log(x) )
 g_stamp++;
 for( key in param0 ) {
    console.log(`key = ${key} value = ${param0[key]}`)
    param[key] = [param0[key][0],g_stamp]
 }
-
-// enter game loop
 
 function print()
 {
@@ -410,174 +367,6 @@ print()
 
 //console.log( param )
 //console.log( data )
-
-function create_param_C_x(value)
-{
-  var name = 'param_C_x'
-  console.log( name )
-  var container = document.getElementById(name);
-
-  var label = document.createElement('label')
-      label.innerHTML = name + ":"
-
-  var slider = document.createElement('input');
-      slider.type = 'range'
-      slider.min = '150'
-      slider.max = '300'
-      slider.step = '10'
-      slider.value = value
-      slider.oninput = function() 
-      { 
-        param.C_x = parseFloat(this.value);
-        document.getElementById(name+'_label').innerHTML = param.C_x[0]
-        translate_tires()
-        //g_scene.background.setRGB(g_color.r, g_color.g, g_color.b );
-        g_renderer.render( g_scene, g_camera );
-      }
-
-  var em = document.createElement('em');
-      em.id = name + "_label"
-      em.style = "font-style: normal"
-      em.innerHTML = value
-
-  container.appendChild(label);
-  container.appendChild(slider);
-  container.appendChild(em);
-}
-
-function create_param_C_y(value)
-{
-  var name = 'param_C_y'
-  console.log( name )
-  var container = document.getElementById(name);
-
-  var label = document.createElement('label')
-      label.innerHTML = name + ":"
-
-  var slider = document.createElement('input');
-      slider.type = 'range'
-      slider.min = '100'
-      slider.max = '250'
-      slider.step = '10'
-      slider.value = value
-      slider.oninput = function() 
-      { 
-        param.C_y = parseFloat(this.value);
-        document.getElementById(name+'_label').innerHTML = param.C_y[0]
-        translate_tires()
-        g_renderer.render( g_scene, g_camera );
-      }
-
-  var em = document.createElement('em');
-      em.id = name + "_label"
-      em.style = "font-style: normal"
-      em.innerHTML = value
-
-  container.appendChild(label);
-  container.appendChild(slider);
-  container.appendChild(em);
-}
-
-function create_param_T_w(value)
-{
-  var name = 'param_T_w'
-  console.log( name )
-  var container = document.getElementById(name);
-
-  var label = document.createElement('label')
-      label.innerHTML = name + ":"
-
-  var slider = document.createElement('input');
-      slider.type = 'range'
-      slider.min = '10'
-      slider.max = '50'
-      slider.step = '2'
-      slider.value = value
-      slider.oninput = function() 
-      { 
-        param.T_w = parseFloat(this.value);
-        document.getElementById(name+'_label').innerHTML = param.T_w[0]
-        morph_tires()
-        morph_wheels()
-        translate_tires()
-        g_renderer.render( g_scene, g_camera );
-      }
-
-  var em = document.createElement('em');
-      em.id = name + "_label"
-      em.style = "font-style: normal"
-      em.innerHTML = value
-
-  container.appendChild(label);
-  container.appendChild(slider);
-  container.appendChild(em);
-}
-
-function create_param_T_d(value)
-{
-  var name = 'param_T_d'
-  console.log( name )
-  var container = document.getElementById(name);
-
-  var label = document.createElement('label')
-      label.innerHTML = name + ":"
-
-  var slider = document.createElement('input');
-      slider.type = 'range'
-      slider.min = '40'
-      slider.max = '100'
-      slider.step = '5'
-      slider.value = value
-      slider.oninput = function() 
-      { 
-        param.T_d = parseFloat(this.value);
-        document.getElementById(name+'_label').innerHTML = param.T_d[0]
-        morph_tires()
-        morph_wheels()
-        translate_tires()
-        g_renderer.render( g_scene, g_camera );
-      }
-
-  var em = document.createElement('em');
-      em.id = name + "_label"
-      em.style = "font-style: normal"
-      em.innerHTML = value
-
-  container.appendChild(label);
-  container.appendChild(slider);
-  container.appendChild(em);
-}
-
-function create_param_T_d_f(value)
-{
-  var name = 'param_T_d_f'
-  console.log( name )
-  var container = document.getElementById(name);
-
-  var label = document.createElement('label')
-      label.innerHTML = name + ":"
-
-  var slider = document.createElement('input');
-      slider.type = 'range'
-      slider.min = '0'
-      slider.max = '1'
-      slider.step = '0.1'
-      slider.value = value
-      slider.oninput = function() 
-      { 
-        param_param.T_d_f = parseFloat(this.value);
-        document.getElementById(name+'_label').innerHTML = param_param.T_d_f
-      }
-
-  var em = document.createElement('em');
-      em.id = name + "_label"
-      em.style = "font-style: normal"
-      em.innerHTML = value
-
-  container.appendChild(label);
-  container.appendChild(slider);
-  container.appendChild(em);
-}
 
 function morph_tires()
 {
@@ -667,10 +456,218 @@ function translate_tires()
   g_part['wheel_rr'].mesh.position.z = data.vRR_z[0]
 }
 
-// init
+function create_param_slider(o)
+{
+  var container = document.getElementById('param_'+o.dv);
 
-create_param_C_x( param.C_x[0] )
-create_param_C_y( param.C_y[0] )
-create_param_T_w( param.T_w[0] )
-create_param_T_d( param.T_d[0] )
-create_param_T_d_f( param_param.T_d_f )
+  var label = document.createElement('label')
+      label.innerHTML = o.description
+
+  var br = document.createElement('br')
+
+  var slider = document.createElement('input');
+      slider.type = 'range'
+      slider.id = o.dv + "_slider"
+      slider.min = o.min
+      slider.max = o.max
+      slider.step = o.step
+      slider.value = o.value
+      slider.oninput = o.oninput()
+
+  var em = document.createElement('em');
+      em.id = o.dv + "_label"
+      em.style = "font-style: normal"
+      em.innerHTML = o.value
+
+  container.appendChild(label);
+  container.appendChild(br);
+  container.appendChild(slider);
+  container.appendChild(em);
+}
+
+// create slider elements
+
+create_param_slider({
+  dv: 'C_x',
+  description: 'Tire contact point length',
+  value: param.C_x[0],
+  min: 150,
+  max: 300,
+  step: 10,
+  oninput: function()
+  {
+    return function() 
+    { 
+      param.C_x = parseFloat(this.value);
+      document.getElementById('C_x_label').innerHTML = param.C_x[0]
+      translate_tires()
+      g_renderer.render( g_scene, g_camera );
+    }
+  },
+})
+
+create_param_slider({
+  dv: 'C_y',
+  description: 'Tire contact point width',
+  value: param.C_y[0],
+  min: 100,
+  max: 250,
+  step: 10,
+  oninput: function()
+  {
+    return function() 
+    { 
+      param.C_y = parseFloat(this.value);
+      document.getElementById('C_y_label').innerHTML = param.C_y[0]
+      translate_tires()
+      g_renderer.render( g_scene, g_camera );
+    }
+  },
+})
+
+create_param_slider({
+  dv: 'T_w',
+  description: 'Tire width',
+  value: param.T_w[0],
+  min: 10,
+  max: 50,
+  step: 2,
+  oninput: function()
+  {
+    return function() 
+    { 
+      param.T_w = parseFloat(this.value);
+      document.getElementById('T_w_label').innerHTML = param.T_w[0]
+      morph_tires()
+      morph_wheels()
+      translate_tires()
+      g_renderer.render( g_scene, g_camera );
+    }
+  },
+})
+
+create_param_slider({
+  dv: 'T_d',
+  description: 'Tire diameter',
+  value: param.T_d[0],
+  min: 40,
+  max: 100,
+  step: 5,
+  oninput: function()
+  {
+    return function() 
+    { 
+      param.T_d = parseFloat(this.value);
+      document.getElementById('T_d_label').innerHTML = param.T_d[0]
+      document.getElementById('T_h_label').innerHTML = param.T_h[0]
+      document.getElementById('H_d_label').innerHTML = param.H_d[0]
+      document.getElementById('T_h_slider').value = param.T_h[0]
+      document.getElementById('H_d_slider').value = param.H_d[0]
+      morph_tires()
+      morph_wheels()
+      translate_tires()
+      g_renderer.render( g_scene, g_camera );
+    }
+  },
+})
+
+create_param_slider({
+  dv: 'T_d_f',
+  description: 'Hub diameter blend factor',
+  value: param_param.T_d_f,
+  min: 0,
+  max: 1,
+  step: 0.1,
+  oninput: function()
+  {
+    return function() 
+    { 
+      param_param.T_d_f = parseFloat(this.value);
+      document.getElementById('T_d_f_label').innerHTML = param_param.T_d_f
+    }
+  },
+})
+
+create_param_slider({
+  dv: 'H_d',
+  description: 'Hub diameter',
+  value: param.H_d[0],
+  min: 10,
+  max: 70,
+  step: 5,
+  oninput: function()
+  {
+    return function() 
+    { 
+      param.H_d = parseFloat(this.value);
+      document.getElementById('H_d_label').innerHTML = param.H_d[0]
+      document.getElementById('T_h_label').innerHTML = param.T_h[0]
+      document.getElementById('T_d_label').innerHTML = param.T_d[0]
+      document.getElementById('T_h_slider').value = param.T_h[0]
+      document.getElementById('T_d_slider').value = param.T_d[0]
+      morph_tires()
+      morph_wheels()
+      translate_tires()
+      g_renderer.render( g_scene, g_camera );
+    }
+  },
+})
+
+create_param_slider({
+  dv: 'H_d_f',
+  description: 'Hub diameter blend factor',
+  value: param_param.H_d_f,
+  min: 0,
+  max: 1,
+  step: 0.1,
+  oninput: function()
+  {
+    return function() 
+    { 
+      param_param.H_d_f = parseFloat(this.value);
+      document.getElementById('H_d_f_label').innerHTML = param_param.H_d_f
+    }
+  },
+})
+
+create_param_slider({
+  dv: 'T_h',
+  description: 'Tire sidewall height',
+  value: param.T_h[0],
+  min: 3,
+  max: 20,
+  step: 2,
+  oninput: function()
+  {
+    return function() 
+    { 
+      param.T_h = parseFloat(this.value);
+      document.getElementById('T_h_label').innerHTML = param.T_h[0]
+      document.getElementById('H_d_label').innerHTML = param.H_d[0]
+      document.getElementById('T_d_label').innerHTML = param.T_d[0]
+      document.getElementById('H_d_slider').value = param.H_d[0]
+      document.getElementById('T_d_slider').value = param.T_d[0]
+      morph_tires()
+      morph_wheels()
+      translate_tires()
+      g_renderer.render( g_scene, g_camera );
+    }
+  },
+})
+
+create_param_slider({
+  dv: 'T_h_f',
+  description: 'Tire sidewall height blend factor',
+  value: param_param.T_h_f,
+  min: 0,
+  max: 1,
+  step: 0.1,
+  oninput: function()
+  {
+    return function() 
+    { 
+      param_param.T_h_f = parseFloat(this.value);
+      document.getElementById('T_h_f_label').innerHTML = param_param.T_h_f
+    }
+  },
+})

@@ -2,7 +2,8 @@
 
 console.log('Three-js included?', !!THREE);
 
-if( WEBGL.isWebGLAvailable() === false ) {
+if( WEBGL.isWebGLAvailable() === false ) 
+{
   document.body.appendChild( WEBGL.getWebGLErrorMessage() );
 }
 
@@ -31,16 +32,15 @@ const g_parts = []
   g_parts.push('transmission')
 }
 
-const g_cparts = []
+const g_parts_ref = []
 {
-  g_cparts.push('wheel-1')
-  g_cparts.push('tire-1')
+  g_parts_ref.push('wheel-1')
+  g_parts_ref.push('tire-1')
 }
 
 // ----------------------------------------------------------------------------
 // main objects
 // ----------------------------------------------------------------------------
-
 
 const g_camera   = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 1000 );
 const g_scene    = new THREE.Scene();
@@ -57,10 +57,18 @@ const g_material = new THREE.MeshPhongMaterial({
 });
 
 let g_part = {}
+
 let g_color = {}
 g_color.r = 0.2
 g_color.g = 0.3
 g_color.b = 0.4
+
+var g_vehicle_ref_x = 12
+var g_vehicle_ref_y = 1.5
+var g_vehicle_ref_z = -49
+var g_vehicle_dx    = 218
+var g_vehicle_dy    = 150
+var g_vehicle_dz    = 69/2.
 
 function load_geom( name )
 {
@@ -73,24 +81,18 @@ function load_geom( name )
     g_part[name] = {}
     g_part[name].mesh = mesh
     g_part[name].bbox = geometry.boundingBox
-    //console.log( geometry.boundingBox )
-    //console.log( geometry.boundingBox.center() )
   });
 }
 
-function load_cgeom( name )
+function load_geom_ref( name )
 {
   var file = "data/" + name + ".stl"
   g_loader.load(file, function (geometry) {
     geometry.computeBoundingBox()
     var mesh = new THREE.Mesh( geometry, g_material );
-    //g_scene.add(mesh);
-    //view_scene( g_scene )
     g_part[name] = {}
     g_part[name].mesh = mesh
     g_part[name].bbox = geometry.boundingBox
-    //console.log( geometry.boundingBox )
-    //console.log( geometry.boundingBox.center() )
     if( name === "tire-1" ) make_tires()
     if( name === "tire-1" ) compute_radii('tire-1')
     if( name === "wheel-1" ) make_wheels()
@@ -136,13 +138,6 @@ function make_tires()
   init_tires()
   view_scene( g_scene )
 }
-
-var g_vehicle_ref_x = 12
-var g_vehicle_ref_y = 1.5
-var g_vehicle_ref_z = -49
-var g_vehicle_dx = 218
-var g_vehicle_dy = 150
-var g_vehicle_dz = 69/2.
 
 function init_tires()
 {
@@ -214,26 +209,16 @@ function sceneBoundingBox( scene )
 {
   var bb = new THREE.Box3()
   g_scene.traverse( function( node ) {
-    if ( node instanceof THREE.Mesh ) {
-        // insert your code here, for example:
-        //node.material = new THREE.MeshNormalMaterial()
-        bb.expandByObject( node )
-    }
-  } );
+    if( node instanceof THREE.Mesh ) bb.expandByObject( node )
+  });
   return bb;
-}
-
-function view_scene( scene )
-{
-  bb = sceneBoundingBox( scene )
-  viewBoundingBox( bb, g_camera )
 }
 
 function viewBoundingBox( box, camera )
 {
+  var verbose = 0
   if( box.isEmpty() ) console.log("scene empty")
   if( box.isEmpty() ) return;
-  var verbose = 0
   var size = new THREE.Vector3(); box.getSize(size)
   var ctr  = new THREE.Vector3(); box.getCenter(ctr)
   var dir  = new THREE.Vector3(); camera.getWorldDirection(dir)
@@ -253,6 +238,12 @@ function viewBoundingBox( box, camera )
   camera.far = 2*distance
   if(verbose) console.log('far:', camera.far )
   camera.updateProjectionMatrix()
+}
+
+function view_scene( scene )
+{
+  bb = sceneBoundingBox( scene )
+  viewBoundingBox( bb, g_camera )
 }
 
 function init() 
@@ -277,8 +268,8 @@ function init()
   g_scene.background = new THREE.Color( 0x000000 );
   g_scene.background.setRGB(0.2,0.3,0.4)
 
-  for( i in g_parts  ) load_geom( g_parts[i] )
-  for( i in g_cparts ) load_cgeom( g_cparts[i] )
+  for( i in g_parts ) load_geom( g_parts[i] )
+  for( i in g_parts_ref ) load_geom_ref( g_parts_ref[i] )
 
   g_headlight = new THREE.DirectionalLight( 0xffffff );
   g_headlight.position.copy( g_camera.position )
@@ -287,8 +278,7 @@ function init()
   var light = new THREE.AmbientLight( 0xffffff );
   g_scene.add( light );
 
-
-  g_stats = new Stats();
+  //g_stats = new Stats();
   //document.body.appendChild( g_stats.dom );
 
   window.addEventListener( 'resize', onWindowResize, false );
@@ -304,9 +294,6 @@ function onWindowResize()
   g_renderer.setSize( 0.65*window.innerWidth, 0.65*window.innerHeight );
 
   g_controls.handleResize();
-
-  //var col2 = document.getElementsByClassName("column2") 
-  //console.log(col2)
 
   render();
 }
@@ -496,7 +483,7 @@ function create_color(x,value)
 
 
 // ----------------------------------------------------------------------------
-// display
+// create elements
 // ----------------------------------------------------------------------------
 
 create_checkboxes(g_parts)

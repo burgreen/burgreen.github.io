@@ -3,18 +3,18 @@
 <html lang="en">
 
 <head>
+<!--
   <script src="https://threejs.org/build/three.min.js"></script>
   <script src="https://threejs.org/examples/js/WebGL.js"></script>
   <script src="https://threejs.org/examples/js/loaders/STLLoader.js"></script>
   <script src="https://threejs.org/examples/js/controls/TrackballControls.js"></script>
   <script src="https://threejs.org/examples/js/libs/stats.min.js"></script>
-<!--
+-->
   <script src="three.js-master/build/three.min.js"></script>
   <script src="three.js-master/examples/js/WebGL.js"></script>
   <script src="three.js-master/examples/js/loaders/STLLoader.js"></script>
   <script src="three.js-master/examples/js/controls/TrackballControls.js"></script>
   <script src="three.js-master/examples/js/libs/stats.min.js"></script>
--->
 </head>
 
 <body>
@@ -34,65 +34,44 @@
       padding: 10px;
   }
   #main-table { 
-    border-collapse: collapse; 
+      border-collapse: collapse; 
   }
   #main-table td {
-    padding: 10px;
-    vertical-align: top;
-    overflow-y: scroll;
-    height: 400px;
+      padding: 10px;
+      vertical-align: top;
+      overflow-y: scroll;
+      height: 400px;
   }
-</style>
-
-<style>
- /* Style the tab */
-.tab {
-    overflow: hidden;
-    border: 1px solid #ccc;
-    background-color: #f1f1f1;
-}
-
-/* Style the buttons that are used to open the tab content */
-.tab button {
-    background-color: inherit;
-    float: left;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    padding: 14px 16px;
-    transition: 0.3s;
-}
-
-/* Change background color of buttons on hover */
-.tab button:hover {
-    background-color: #ddd;
-}
-
-/* Create an active/current tablink class */
-.tab button.active {
-    background-color: #ccc;
-}
-
-/* Style the tab content */
-.tabcontent {
-    display: none;
-    padding: 6px 12px;
-    border: 1px solid #ccc;
-    border-top: none;
-} 
+  .tab {
+      overflow: hidden;
+      border: 1px solid #ccc;
+      background-color: #f1f1f1;
+  }
+  .tab button {
+      background-color: inherit;
+      float: left;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      padding: 14px 16px;
+      transition: 0.3s;
+  }
+  .tab button:hover {
+      background-color: #ddd;
+  }
+  .tab button.active {
+      background-color: #ccc;
+  }
+  .tabcontent {
+      display: none;
+      padding: 6px 12px;
+      border: 1px solid #ccc;
+      border-top: none;
+  } 
 </style>
 
 
 <label id="vehicle_label" style="font-style: normal;">Notional vehicle</label>
-<!--
-<div class="row">
-  <div class="column1" style="background-color:#aaa;">
-  </div>
-  <div class="column2" style="background-color:#bbb;">
-  </div>
-</div>
-https://css-tricks.com/fluid-width-equal-height-columns/
--->
 
 <table id="main-table">
   <colgroup>
@@ -111,32 +90,36 @@ https://css-tricks.com/fluid-width-equal-height-columns/
         Update
       </button>
       
-<!-- Tab links -->
-<div class="tab">
-  <button class="tablinks" onclick="open_tab(event,'Visibility')">Visibility</button>
-  <button class="tablinks" onclick="open_tab(event,'Parameters')">Parameters</button>
-  <button class="tablinks" onclick="open_tab(event,'BG')">BG</button>
-</div>
+      <!-- Tab links -->
+      <div class="tab">
+        <button class="tablinks" onclick="open_tab(event,'Visibility')">Visibility</button>
+        <button class="tablinks" onclick="open_tab(event,'Parameters')">Parameters</button>
+        <button class="tablinks" onclick="open_tab(event,'BG')">BG</button>
+      </div>
 
-<!-- Tab content -->
-<div id="Visibility" class="tabcontent">
-  <div id="checkboxes"> </div>
-</div>
+      <!-- Tab content -->
+      <div id="Visibility" class="tabcontent">
+        <div id="checkboxes"> </div>
+      </div>
 
-<div id="Parameters" class="tabcontent">
-      <div id="param_C_x"> </div>
-      <div id="param_C_y"> </div>
-      <div id="param_T_w"> </div>
-      <div id="param_T_d"> </div>
-      <div id="param_T_d_f"> </div>
-</div>
-
-<div id="BG" class="tabcontent">
-      <div id="color_r"> </div>
-      <div id="color_g"> </div>
-      <div id="color_b"> </div>
-</div>
-
+      <div id="Parameters" class="tabcontent">
+        <div id="param_C_x"> </div>
+        <div id="param_C_y"> </div>
+        <div id="param_T_w"> </div>
+        <div id="param_T_d"> </div>
+        <div id="param_T_d_f"> </div>
+        <div id="param_T_h"> </div>
+        <div id="param_T_h_f"> </div>
+        <div id="param_H_d"> </div>
+        <div id="param_H_d_f"> </div>
+      </div>
+      
+      <div id="BG" class="tabcontent">
+        <div id="color_r"> </div>
+        <div id="color_g"> </div>
+        <div id="color_b"> </div>
+      </div>
+      
     </td>
 
     <td class="column3">
@@ -146,30 +129,6 @@ https://css-tricks.com/fluid-width-equal-height-columns/
 
   </tr>
 </table>
-
-<script> 
-
-function open_tab(evt, name) {
-    // Declare all variables
-    var i, tabcontent, tablinks;
-
-    // Get all elements with class="tabcontent" and hide them
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-    }
-
-    // Get all elements with class="tablinks" and remove the class "active"
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-
-    // Show the current tab, and add an "active" class to the button that opened the tab
-    document.getElementById(name).style.display = "block";
-    evt.currentTarget.className += " active";
-} 
-</script> 
 
 <button class="tablinks" 
   id="defaultOpen"
@@ -181,15 +140,32 @@ function open_tab(evt, name) {
 <script>
   document.getElementById("defaultOpen").click();
   document.getElementById("defaultOpen").style.display = "none"
+  function open_tab(evt, name) 
+  {
+    var tabcontent = document.getElementsByClassName("tabcontent");
+    for( let i=0; i < tabcontent.length; i++) 
+    {
+      tabcontent[i].style.display = "none";
+    }
+
+    var tablinks = document.getElementsByClassName("tablinks");
+    for( let i=0; i < tablinks.length; i++) 
+    {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+
+    document.getElementById(name).style.display = "block";
+    evt.currentTarget.className += " active";
+  } 
 </script> 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ramda/0.25.0/ramda.min.js"></script>
 <script src="reader-three.js"></script>
-<!--script src="https://unpkg.com/@reactive/rxjs@5.0.0-beta/dist/global/Rx.js"></script-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/rxjs/5.0.0-beta.12/Rx.min.js"></script>
 <script src="rxmodel-1.js"></script>
 <!--
 -->
 
 </body>
+
 </html>
