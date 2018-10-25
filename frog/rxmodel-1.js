@@ -573,7 +573,7 @@ create_param_slider({
 
 create_param_slider({
   dv: 'T_d_f',
-  description: 'Hub diameter blend factor',
+  description: 'Tire diameter blend factor',
   value: param_param.T_d_f,
   min: 0,
   max: 1,
