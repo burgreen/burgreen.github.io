@@ -1,0 +1,12 @@
+meta:
+  name: transmission_main
+  bbox: [[-53.563,-13.921,-17.476],[1.214,18.622,18.640]]
+  offset: [81.1, -0.75, 54.5]
+  point:
+    origin:  
+      pos: [0,0,0]
+      mate: transmission_drive_shaft.front
+  metric:
+    none: 
+  deform:
+    none:

@@ -1,0 +1,20 @@
+meta:
+  name: transmission_drive_shaft
+  bbox: [[-60.451,-2.760,-2.395],[ 60.451,2.760,2.395]]
+  offset: [140.0, -0.75, 54.5]
+  point:
+    origin: 
+      pos: [0,0,0]
+      mate: none
+    front: 
+      pos: [-59,0.0484014,0]
+      mate: transmission_main.origin
+    rear: 
+      pos: [59,-0.0484014,0]
+      mate: transmission_hub_rear.shaft
+  metric:
+    length: 118
+    quaternion: 0
+  deform:
+    length:
+      x_equal_box: [[-46.219,-2.394,-2.759],[48.131,2.394,2.759]]

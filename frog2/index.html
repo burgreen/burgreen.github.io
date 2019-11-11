@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <script src="https://threejs.org/build/three.min.js"></script>
+<!--
+  <script src="https://threejs.org/examples/js/WebGL.js"></script>
+  <script src="https://threejs.org/examples/js/loaders/STLLoader.js"></script>
+  <script src="https://threejs.org/examples/js/controls/TrackballControls.js"></script>
+  <script src="https://threejs.org/examples/js/libs/stats.min.js"></script>
+-->
+  <script src="js/WebGL.js"></script>
+  <script src="js/loaders/STLLoader.js"></script>
+  <script src="js/controls/TrackballControls.js"></script>
+  <script src="js/libs/stats.min.js"></script>
+  <script src="js/libs/js-yaml.min.js"></script>
+  <script src="js/libs/quaternion.min.js"></script>
+  <script src="js/xhr_reader.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ramda/0.25.0/ramda.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/rxjs/5.0.0-beta.12/Rx.min.js"></script>
+  <script>
+  function open_tab(evt, name) 
+  {
+    var tabcontent = document.getElementsByClassName("tabcontent");
+    for( let i=0; i < tabcontent.length; i++) 
+    {
+      tabcontent[i].style.display = "none";
+    }
+
+    var tablinks = document.getElementsByClassName("tablinks");
+    for( let i=0; i < tablinks.length; i++) 
+    {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+
+    document.getElementById(name).style.display = "block";
+    evt.currentTarget.className += " active";
+  } 
+  </script> 
+  
+<!--
+  <script src="three.js-master/build/three.min.js"></script>
+  <script src="three.js-master/examples/js/WebGL.js"></script>
+  <script src="three.js-master/examples/js/loaders/STLLoader.js"></script>
+  <script src="three.js-master/examples/js/controls/TrackballControls.js"></script>
+  <script src="three.js-master/examples/js/libs/stats.min.js"></script>
+-->
+</head>
+
+<body>
+
+<style>
+  .column1 {
+      background: #ddd;
+      float: left;
+      width: 90%;
+      padding: 10px;
+      overflow-y: scroll;
+  }
+  .column2 {
+      background: #fff;
+      float: left;
+      /*width: 70%;*/
+      padding: 10px;
+  }
+  #main-table { 
+      border-collapse: collapse; 
+  }
+  #main-table td {
+      padding: 10px;
+      vertical-align: top;
+      overflow-y: scroll;
+      height: 400px;
+  }
+  .tab {
+      overflow: hidden;
+      border: 1px solid #ccc;
+      background-color: #f1f1f1;
+  }
+  .tab button {
+      background-color: inherit;
+      float: left;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      padding: 14px 16px;
+      transition: 0.3s;
+  }
+  .tab button:hover {
+      background-color: #ddd;
+  }
+  .tab button.active {
+      background-color: #ccc;
+  }
+  .tabcontent {
+      display: none;
+      padding: 6px 12px;
+      border: 1px solid #ccc;
+      border-top: none;
+  } 
+</style>
+
+
+<label id="vehicle_label" style="font-style: normal;">Notional vehicle</label>
+
+<table id="main-table">
+  <colgroup>
+    <col style="width:60%">
+    <col style="width:50%">
+  </colgroup> 
+  <tr>
+    <td class="column1">
+
+      <button type="button" 
+        onclick=
+        "
+          console.log('Update clicked')
+        "
+        > 
+        Update
+      </button>
+      
+      <!-- Tab links -->
+      <div class="tab">
+        <button class="tablinks" onclick="open_tab(event,'Visibility')">Visibility</button>
+        <button class="tablinks" onclick="open_tab(event,'Parameters')">Parameters</button>
+        <button class="tablinks" onclick="open_tab(event,'BG')">BG</button>
+      </div>
+
+      <!-- Tab content -->
+      <div id="Visibility" class="tabcontent">
+        <div id="checkboxes"> </div>
+      </div>
+
+      <div id="Parameters" class="tabcontent">
+        <div id="param_C_x"> </div>
+        <div id="param_C_y"> </div>
+        <div id="param_T_w"> </div>
+        <div id="param_T_d"> </div>
+        <div id="param_T_d_f"> </div>
+        <div id="param_T_h"> </div>
+        <div id="param_T_h_f"> </div>
+        <div id="param_H_d"> </div>
+        <div id="param_H_d_f"> </div>
+      </div>
+      
+      <div id="BG" class="tabcontent">
+        <div id="color_r"> </div>
+        <div id="color_g"> </div>
+        <div id="color_b"> </div>
+      </div>
+      
+    </td>
+
+    <td class="column3">
+      <h2></h2>
+      <div id="MyScene"> </div>
+    </td>
+
+  </tr>
+</table>
+
+<button class="tablinks" 
+  id="defaultOpen"
+  onclick="open_tab(event,'Visibility')" 
+  >
+  Visibility
+</button>
+
+<script>
+  document.getElementById("defaultOpen").click();
+  document.getElementById("defaultOpen").style.display = "none"
+</script> 
+
+  <script src="main1.js"></script>
+
+</body>
+
+</html>

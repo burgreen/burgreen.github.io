@@ -1,0 +1,21 @@
+meta:
+  name: transmission_hub_front
+  bbox: [[-12.750,-84.137,-17.936],[13.750,84.155,11.500]]
+  offset: [-0.2, -0.75, 43.7]
+  point:
+    origin: 
+      pos: [0,0,0]
+      mate: none
+    left: 
+      pos: [0,-78.22,-9.1881]
+      mate: wheel_front_left.origin
+    right: 
+      pos: [0,78.2547,-8.65189]
+      mate: wheel_front_right.origin
+  metric:
+    width0: 156.476
+    width: 150.
+  deform:
+    width:
+      y_min_box: [[-46.219,-2.394,-2.759],[48.131,2.394,2.759]]
+      y_max_box: [[-46.219,27.1129,-2.759],[48.131,27.1129,2.759]]

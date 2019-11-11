@@ -1,0 +1,215 @@
+computer:
+  name: halo
+  url: 130.18.14.173
+  os: linux
+  salt_access: ssh
+  software: 
+    - ansys
+    - openfoam
+    - pointwise
+  available_mem: 100
+  avaliable_cpu: 0.65
+---
+computer:
+  name: titan
+  url: 130.18.14.153
+  os: linux
+  salt_access: ssh
+  software: 
+    - ansys
+    - optimal
+    - triangle
+  available_mem: 100
+  avaliable_cpu: 0.65
+---
+computer:
+  offline:
+  name: lenovo
+  url: 196.198.0.1
+  os: win32
+  salt_access: minion
+  software: 
+    - bloodX
+    - triangle
+    - rhino-4.x
+  available_mem: 100
+  avaliable_cpu: 0.65
+---
+application:
+  area: geometry
+  name: rhino
+  packages: [rhino-4.x]
+  inputs: 
+    extensions: [iges]
+  outputs:
+    extensions: [3dm]
+  dependencies:
+    - none
+---
+application:
+  area: meshgen
+  name: triangle
+  packages: [triangle]
+  inputs:
+    parameters: 
+      extensions: [aci,inp]
+    scripts:
+      extensions: [sh]
+    geometry: 
+      extensions: [3dm,iges]
+  outputs:
+    mesh:
+      extensions: [triangle]
+  dependencies: 
+    - geometry: any
+---
+application:
+  area: meshgen
+  name: pointwise
+  packages: [pointwise]
+  inputs:
+    parameters: 
+      extensions: [aci,inp]
+    geometry: 
+      extensions: [3dm,iges]
+  outputs:
+    mesh:
+      extensions: [cas]
+  dependencies: 
+    - geometry: [rhino,discrete]
+---
+application:
+  area: cfd
+  name: openfoam
+  packages: [openfoam]
+  inputs:
+    parameters: 
+      extensions: [aci]
+    mesh: 
+      extensions: [fgrid,openfoam]
+  outputs:
+    cfd:
+      extensions: [openfoam]
+  dependencies:
+    - meshgen: [triangle]
+---
+application:
+  area: cfd
+  name: fluent
+  packages: [ansys,optimal]
+  inputs:
+    parameters: 
+      extensions: [aci,dat]
+    meshgen: 
+      extensions: [msh,cas]
+  outputs:
+    cfd:
+      extensions: [cas,dat]
+  dependencies:
+    - meshgen: [pointwise,triangle]
+---
+application:
+  area: bdam
+  name: bloodX
+  packages: [bloodX]
+  inputs:
+    parameters: 
+      extensions: [inp]
+    cfd: 
+      extensions: [openfoam,cas]
+  outputs:
+    hemolysis:
+      extensions: [raw]
+  dependencies:
+    - cfd: any
+---
+case:
+  application: triangle
+  descriptor: baseline
+  inputs:
+    parameters: 
+      file: spacing.inp
+    geometry: 
+      file: model3.3dm
+      location: local
+  outputs: 
+    mesh:
+      file: model3.triangle
+      location: local
+---
+case:
+  application: triangle
+  inputs:
+    parameters: 
+      file: spacing.inp
+    geometry: 
+      file: model4.3dm
+      location: local
+  outputs: 
+    mesh:
+      file: model4.triangle
+      location: local
+---
+case:
+  application: triangle
+  inputs:
+    parameters: 
+      file: spacing.inp
+    geometry: 
+      file: model5.3dm
+      location: local
+  outputs: 
+    mesh:
+      file: model5.triangle
+      location: local
+---
+case:
+  application: openfoam
+  inputs:
+    parameters: 
+      file: flow1.aci
+    mesh: 
+      file: auto
+  outputs: 
+    cfd:
+      file: auto_flow1.openfoam
+      location: local
+---
+case:
+  application: openfoam
+  inputs:
+    parameters: 
+      file: flow2.aci
+    mesh: 
+      file: auto
+  outputs: 
+    cfd:
+      file: auto_flow2.openfoam
+      location: local
+---
+case:
+  application: bloodX
+  inputs:
+    parameters: 
+      file: bdam1.inp
+    cfd: 
+      file: auto
+  outputs: 
+    hemolysis:
+      file: bdam1.results
+      location: local
+---
+case:
+  application: bloodX
+  inputs:
+    parameters: 
+      file: bdam2.inp
+    cfd: 
+      file: auto
+  outputs: 
+    hemolysis:
+      file: bdam2.results
+      location: local
+
+
+

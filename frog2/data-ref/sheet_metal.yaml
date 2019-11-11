@@ -1,0 +1,18 @@
+meta:
+  name: sheet_metal
+  bbox: [[0,0,0],[0,0,0]]
+  offset: [0,0,0]
+  point:
+    origin: 
+      pos: [0,0,0]
+      mate: none
+  metric:
+    width: 150.
+    length: 218.
+  deform:
+    width:
+      y_min_box: [[0,-7.893,0],[0,-7.893,0]]
+      y_max_box: [[0,7.893,0],[0,7.893,0]]
+    length: 
+      x_min_box: [[-8.319,0,0],[-8.319,0,0]]
+      x_max_box: [[23.1,0,0],[23.1,0,0]]

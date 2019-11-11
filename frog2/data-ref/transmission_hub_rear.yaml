@@ -1,0 +1,24 @@
+meta:
+  name: transmission_hub_rear
+  bbox: [[-23.354,-84.135,-17.936],[12.750,84.162,11.500]]
+  offset: [1.2, -0.75, 43.8]
+  point:
+    origin: 
+      pos: [0,0,0]
+      mate: none
+    shaft: 
+      pos: [-21.8545,-0.0599362,-9]
+      mate: transmission_drive_shaft.rear
+    left:  
+      pos: [0,-78.22,-9.1881]
+      mate: wheel_rear_left.origin
+    right: 
+      pos: [0,78.2547,-8.65189]
+      mate: wheel_rear_right.origin
+  metric:
+    width0: 156.476
+    width: 150.
+  deform:
+    width:
+      y_min_box: [[-5.025,-24.625,-4.150],[5.025,-12.397,4.058]]
+      y_max_box: [[-5.025,12.228,-4.150],[5.025,24.456,4.058]]

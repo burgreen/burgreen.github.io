@@ -1,0 +1,16 @@
+component:
+  name: transmission_drive_shaft
+  bbox: [[-60.451,-2.760,-2.395],[ 60.451,2.760,2.395]]
+  point:
+    - origin: [0,0,0]
+      mate: []
+    - front: [-59,0.0484014,0]
+      mate: [transmission_main.origin]
+    - rear: [59,-0.0484014,0]
+      mate: [transmission_hub_rear.shaft]
+  metric:
+    - length: 118
+    - radians_about_y: 0
+  deform:
+    - length:
+        - x_min_box: [[-46.219,-2.394,-2.759],[48.131,2.394,2.759]]
